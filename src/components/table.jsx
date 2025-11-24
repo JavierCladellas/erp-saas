@@ -2,7 +2,7 @@ import { useState, Fragment } from "react";
 import PaginationControls from "./paginationControls";
 import { FaChevronRight } from "react-icons/fa";
 
-const Table = ({ columns, data, maxRows = 15, subRowsKey, subColumns }) => {
+const Table = ({ columns, data, maxRows = 15, subRowsKey, subColumns, onRowClick, isRowSelected }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [expandedRows, setExpandedRows] = useState({});
     const totalPages = Math.ceil(data.length / maxRows);
@@ -50,8 +50,11 @@ const Table = ({ columns, data, maxRows = 15, subRowsKey, subColumns }) => {
                         <Fragment key={row.id}>
                             {/* Main Row */}
                             <tr
-                                className={`hover:bg-gray-50 transition ${hasSubRows(row) ? "cursor-pointer" : ""}`}
-                                onClick={() => hasSubRows(row) && toggleRow(row.id)}
+                                className={` transition cursor-pointer ${isRowSelected?.(row) ? "bg-indigo-50" : "hover:bg-gray-50"} `}
+                                onClick={() => {
+                                    onRowClick?.(row);
+                                    if (hasSubRows(row)) toggleRow(row.id);
+                                }}
                             >
                                 {columns.map((col, colIdx) => (
                                     <td key={col.key} className={`px-4 py-3 whitespace-nowrap`}>

@@ -22,23 +22,24 @@ const InventorySelectTable = ({ value = [], onChange, label }) => {
             onChange([...value, id]);
         }
     };
-
     const columns = [
         {
-            key: "select", label: "", width: "w-10", align: "center",
-            render: (_, row) => (<CheckboxField name="" checked={value.includes(row.id)} onChange={() => toggleItem(row.id)} />)
-        },
-        {
             key: "image_url", label: "Image", width: "w-16", align: "center",
-            render: val => (<img src={val ? `http://localhost:8000/api/${val}` : "https://via.placeholder.com/50"} className="w-12 h-12 rounded object-cover" />)
+            render: val => (
+                <img
+                    src={val ? `http://localhost:8000/api/${val}` : "https://via.placeholder.com/50"}
+                    className="w-12 h-12 rounded object-cover"
+                />
+            )
         },
         { key: "sku", label: "SKU", width: "w-20" },
         {
             key: "name", label: "Name", width: "w-30",
-            render: (value) => (<div className="truncate max-w-xs" title={value}> {value}</div>)
+            render: v => <div className="truncate max-w-xs" title={v}>{v}</div>
         },
         { key: "stock", label: "Stock", width: "w-20" },
     ];
+
 
     return (
         <div className="space-y-2">
@@ -48,7 +49,9 @@ const InventorySelectTable = ({ value = [], onChange, label }) => {
             />
 
             <div className="max-h-72 overflow-y-auto border rounded-lg">
-                <Table columns={columns} data={filtered} maxRows={50} />
+                <Table columns={columns} data={filtered} maxRows={10}
+                    onRowClick={(row) => toggleItem(row.id)}
+                    isRowSelected={(row) => value.includes(row.id)} />
             </div>
 
             <div className="text-sm text-gray-600">
