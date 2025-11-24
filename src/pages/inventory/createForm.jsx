@@ -22,10 +22,15 @@ const ItemCreateForm = ({ showModal, onClose }) => {
                 const num = Number(value);
                 return value === "" || isNaN(num) || num < 0 || !Number.isInteger(num) ? "Invalid stock" : "";
             case "price":
+                if (value === "") return "Price is required";
+
                 const price = Number(value);
-                return value === "" || isNaN(price) || price < 0 ? "Invalid price" : "";
-            case "category":
-                return (form?.isProduct && (!value || value === "")) ? "Category is required" : "";
+                if (isNaN(price) || price < 0) return "Invalid price";
+
+                const decimalPart = value.toString().split(".")[1];
+                if (decimalPart && decimalPart.length > 2) return "Invalid price";
+
+                return "";
             case "product":
                 return (form?.isVariant && (!value || value === "")) ? "Product is required" : "";
             default:
@@ -47,7 +52,7 @@ const ItemCreateForm = ({ showModal, onClose }) => {
 
 
     const addItemFields = [
-        { name: "name", label: "Product Name", type: "text" },
+        { name: "name", label: "Item Name", type: "text" },
         {
             row: true,
             fields: [
@@ -60,40 +65,22 @@ const ItemCreateForm = ({ showModal, onClose }) => {
         {
             row: true,
             fields: [
-                {
-                    name: "isProduct", label: "Add as product", type: "checkbox", variant: "switch", defaultValue: true,
-                    customOnChange: (form, newVal) => ({ isProduct: newVal, isVariant: false })
-                },
-                {
-                    name: "isVariant", label: "Add as variant", type: "checkbox", variant: "switch", defaultValue: false,
-                    customOnChange: (form, newVal) => ({ isVariant: newVal, isProduct: false })
-                },
+                { name: "isProduct", label: "Add as product", type: "checkbox", variant: "switch", defaultValue: true, customOnChange: (form, newVal) => ({ isProduct: newVal, isVariant: false }) },
+                { name: "isVariant", label: "Add as variant", type: "checkbox", variant: "switch", defaultValue: false, customOnChange: (form, newVal) => ({ isVariant: newVal, isProduct: false }) },
             ]
         },
         {
             row: true,
             fields: [
-                {
-                    name: "category", label: "Category", type: "select", options: [{ "value": "", "label": "No category" }, { "value": "test", "label": "Candy" }],
-                    showWhen: form => form.isProduct === true
-                },
-                {
-                    name: "price", label: "Price", type: "number", step: 0.01,
-                    showWhen: form => form.isProduct === true
-                },
+                { name: "price", label: "Price", type: "number", flex:1,step: 0.01, prefix: "$", autoFixDecimals: true, showWhen: form => form.isProduct === true},
+                { name: "category", label: "Category", type: "select", flex: 3, options: [{ "value": "", "label": "No category" }, { "value": "test", "label": "Candy" }], showWhen: form => form.isProduct === true },
             ]
         },
         {
             row: true,
             fields: [
-                {
-                    name: "product", label: "Product", type: "select", options: [{ "value": "test", "label": "Brosse à dent" }],
-                    showWhen: form => form.isVariant === true
-                },
-                {
-                    name: "price", label: "Price", type: "number", step: 0.01,
-                    showWhen: form => form.isVariant === true
-                },
+                { name: "price", label: "Price", type: "number", flex:1, step: 0.01, prefix: "$", autoFixDecimals: true, showWhen: form => form.isVariant === true},
+                { name: "product", label: "Product", type: "select", flex:3, options: [{ "value": "test", "label": "Brosse à dent" }], showWhen: form => form.isVariant === true },
             ]
         },
 
