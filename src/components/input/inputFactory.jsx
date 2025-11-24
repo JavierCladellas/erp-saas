@@ -4,6 +4,7 @@ import CheckboxField from "./checkbox";
 import ImageField from "./image";
 import SearchableDropdown from "./dropdown";
 import DynamicSelect from "./dynamicSelect";
+import InventorySelectTable from "../../pages/inventory/selectTable";
 
 
 const InputFactory = ({ type, handleChange, ...props }) => {
@@ -20,6 +21,8 @@ const InputFactory = ({ type, handleChange, ...props }) => {
             return <SearchableDropdown {...props} onChange={onChange} />
         case "dynamic-select":
             return <DynamicSelect {...props} onChange={handleChange} />;
+        case "inventory-select":
+            return <InventorySelectTable {...props} onChange = {onChange} />
         case "textarea":
         case "text":
         case "email":
