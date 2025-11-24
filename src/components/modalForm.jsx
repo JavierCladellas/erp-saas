@@ -4,7 +4,8 @@ import InputFactory from "./input/inputFactory";
 import Modal from "./modal";
 
 
-const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit", validateField }) => {
+const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit", validateField, size="md" }) => {
+
     const [formData, setFormData] = useState(() => {
         const initialData = {};
         fields.forEach((field) => {
@@ -28,12 +29,12 @@ const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submi
             if (field.row && Array.isArray(field.fields)) {
                 field.fields.forEach((sub) => {
                     if (!(sub.name in formData)) {
-                        const error = validateField?.(sub.name, "", formData,forSubmit);
+                        const error = validateField?.(sub.name, "", formData, forSubmit);
                         if (error) newErrors[sub.name] = error;
                     }
                 });
             } else if (!(field.name in formData)) {
-                const error = validateField?.(field.name, "", formData,forSubmit);
+                const error = validateField?.(field.name, "", formData, forSubmit);
                 if (error) newErrors[field.name] = error;
             }
         });
@@ -97,7 +98,7 @@ const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submi
 
 
     return (
-        <Modal open={open} onClose={onClose} title={title}>
+        <Modal open={open} onClose={onClose} title={title} size={size}>
             <form onSubmit={handleSubmit} onChange={onFormChange} className="space-y-5 mt-2">
                 {fields.map((field, idx) =>
                     field.row && Array.isArray(field.fields) ? (
