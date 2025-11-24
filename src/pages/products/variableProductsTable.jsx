@@ -69,7 +69,7 @@ const VariableProductsTable = ({ variableProducts }) => {
         { key: "name", label: "Name", width: "w-16", render: (value) => <div className="truncate max-w-xs" title={value}>{value}</div> },
         { key: "sku", label: "SKU", width: "w-16", render: (value) => value },
         { key: "attributes", label: "Attributes", width: "w-40", render: (_, v) => v.variant_attributes.map(attr => `${attr.attribute.name}: ${attr.attribute_value.value}`).join(", ") },
-        { key: "price", label: "Price", width: "w-16", align: "right", render: (value) => `$${value?.toFixed(2)}` },
+        { key: "price", label: "Price ($)", width: "w-16", align: "right", render: (value) => `$${value?.toFixed(2)}` },
         { key: "has_stock", label: "Stock", width: "w-16", align: "center", render: (value) => <div className={value === true ? "text-green-500" : "text-red-500"}>{value === true ? "In stock" : "Out of stock"}</div> },
         {
             key: "actions",

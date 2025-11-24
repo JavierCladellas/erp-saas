@@ -43,7 +43,7 @@ const SimpleProductsTable = ({ simpleProducts }) => {
             )
         },
         {
-            key: "price", label: "Price", width: "w-16", align: "right",
+            key: "price", label: "Price ($)", width: "w-16", align: "right",
             render: (_, row) => row.variants?.length === 1 ? `$${row.variants[0].price.toFixed(2)}` : "—"
         },
         {
