@@ -29,7 +29,7 @@ const Modal = ({ open, onClose, title, children, size }) => {
                 >
                     <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
                         transition={{ duration: 0.2, ease: "easeOut" }} onClick={(e) => e.stopPropagation()}
-                        className={`bg-white w-full max-w-lg rounded-2xl shadow-xl p-4 sm:p-6 overflow-y-auto max-h-[95vh] min-h-[60vh] ${sizeClasses[size || "md"]}`}
+                        className={`bg-white w-full rounded-2xl shadow-xl p-4 sm:p-6 overflow-y-auto max-h-[95vh] min-h-[60vh] ${sizeClasses[size || "md"]}`}
                     >
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
