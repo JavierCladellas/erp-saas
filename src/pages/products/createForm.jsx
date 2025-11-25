@@ -27,7 +27,7 @@ const ProductCreateForm = ({ showModal, onClose }) => {
         { name: "description", label: "Description", type: "textarea" },
         { name: "category", label: "Category", type: "select", options: [{ "value": "", "label": "No category" }, { "value": "test", "label": "Candy" }] },
         { name: "image", label: "Image", type: "image", showWhen: form => !form.isVariable },
-        { name: "inventoryItems", label: "Link Inventory Items", type: "inventory-select"}
+        { name: "inventoryItems", label: "Link Inventory Items", type: "inventory-select", showWhen: form => !form.isVariable}
 
     ];
 

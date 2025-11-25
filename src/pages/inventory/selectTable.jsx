@@ -1,27 +1,9 @@
-import { useState, useMemo } from "react";
-import Table from "../../components/table";
-import CheckboxField from "../../components/input/checkbox";
 import useFetch from "../../components/useFetch";
+import SelectDoubleTable from "../../components/input/selectDoubleTable";
 
 const InventorySelectTable = ({ value = [], onChange, label }) => {
     const { data: items, loading, error } = useFetch("http://localhost:8000/api/items");
 
-    const [search, setSearch] = useState("");
-
-    const filtered = useMemo(() => {
-        return items.filter(item =>
-            item.name.toLowerCase().includes(search.toLowerCase()) ||
-            item.sku.toLowerCase().includes(search.toLowerCase())
-        );
-    }, [search, items]);
-
-    const toggleItem = (id) => {
-        if (value.includes(id)) {
-            onChange(value.filter(v => v !== id));
-        } else {
-            onChange([...value, id]);
-        }
-    };
     const columns = [
         {
             key: "image_url", label: "Image", width: "w-16", align: "center",
@@ -40,24 +22,14 @@ const InventorySelectTable = ({ value = [], onChange, label }) => {
         { key: "stock", label: "Stock", width: "w-20" },
     ];
 
-
     return (
-        <div className="space-y-2">
-            <label className="block text-gray-700 mb-1">{label}</label>
-            <input placeholder="Search items..." value={search} onChange={(e) => setSearch(e.target.value)}
-                className="w-full border rounded px-3 py-2"
-            />
-
-            <div className="max-h-72 overflow-y-auto border rounded-lg">
-                <Table columns={columns} data={filtered} maxRows={10}
-                    onRowClick={(row) => toggleItem(row.id)}
-                    isRowSelected={(row) => value.includes(row.id)} />
-            </div>
-
-            <div className="text-sm text-gray-600">
-                Selected: <strong>{value.length}</strong>
-            </div>
-        </div>
+        <SelectDoubleTable
+            items={items}
+            columns={columns}
+            value={value}
+            onChange={onChange}
+            searchKeys={["sku", "name"]}
+        />
     );
 };
 
