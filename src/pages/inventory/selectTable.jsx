@@ -1,7 +1,7 @@
 import useFetch from "../../components/useFetch";
 import SelectDoubleTable from "../../components/input/selectDoubleTable";
 
-const InventorySelectTable = ({ value = [], onChange, label }) => {
+const InventorySelectTable = ({ value = [], onChange, label, externalError }) => {
     const { data: items, loading, error } = useFetch("http://localhost:8000/api/items");
 
     const columns = [
@@ -29,6 +29,7 @@ const InventorySelectTable = ({ value = [], onChange, label }) => {
             value={value}
             onChange={onChange}
             searchKeys={["sku", "name"]}
+            externalError={externalError}
         />
     );
 };

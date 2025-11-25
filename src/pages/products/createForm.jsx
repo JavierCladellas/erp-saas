@@ -27,12 +27,8 @@ const ProductCreateForm = ({ showModal, onClose }) => {
                 return "";
 
             case "inventoryItems":
-                if (form?.isVariable) return ""; // Only required when not variable
-                // Only validate on submit
-                if (!forSubmit) return "";
-                return (Array.isArray(value) && value.length > 0)
-                    ? ""
-                    : "Select at least 1 inventory item";
+                if (form?.isVariable) return "";
+                return (Array.isArray(value) && value.length > 0) ? "" : "Select at least 1 inventory item";
 
             default:
                 return "";
