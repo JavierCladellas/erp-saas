@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import Table from "../../components/table";
 
-const SelectDoubleTable = ({ items = [], value = [], columns, label, onChange, searchKeys = ["name", "sku"] }) => {
+const SelectDoubleTable = ({ items = [], value = [], columns, label, onChange, searchKeys = ["name", "sku"], externalError }) => {
     const [search, setSearch] = useState("");
     const safeItems = Array.isArray(items) ? items : [];
 
@@ -10,16 +10,9 @@ const SelectDoubleTable = ({ items = [], value = [], columns, label, onChange, s
         return searchKeys.some(key => item[key]?.toString().toLowerCase().includes(query));
     };
 
+    const selectedItems = useMemo(() => safeItems.filter(item => value.includes(item.id)), [safeItems, value]);
 
-    const selectedItems = useMemo(() => {
-        return safeItems.filter(item => value.includes(item.id));
-    }, [safeItems, value]);
-
-
-    const filtered = useMemo(() => {
-        return safeItems.filter(item => matchesSearch(item)).filter(item => !value.includes(item.id));
-    }, [search, safeItems, value]);
-
+    const filtered = useMemo(() => safeItems.filter(item => matchesSearch(item)).filter(item => !value.includes(item.id)), [search, safeItems, value]);
 
     const toggleItem = (id) => {
         if (value.includes(id)) {
@@ -34,7 +27,12 @@ const SelectDoubleTable = ({ items = [], value = [], columns, label, onChange, s
 
             {label && <label className="block text-gray-700">{label}</label>}
 
-            <input placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full border rounded px-3 py-2" />
+            <input
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className={`w-full border rounded px-3 py-2 ${externalError ? "border-red-500" : "border-gray-300"}`}
+            />
 
             {/* Selected Items */}
             {selectedItems.length > 0 && (
@@ -56,7 +54,7 @@ const SelectDoubleTable = ({ items = [], value = [], columns, label, onChange, s
             )}
 
             {/* Main Table */}
-            <div className="max-h-72 overflow-y-auto border rounded-lg">
+            <div className={`max-h-72 overflow-y-auto border rounded-lg ${externalError ? "border-red-500" : "border-gray-300"}`}>
                 <Table
                     columns={columns}
                     data={filtered}
@@ -66,6 +64,7 @@ const SelectDoubleTable = ({ items = [], value = [], columns, label, onChange, s
                 />
             </div>
 
+            {externalError && <p className="text-red-500 text-sm mt-1">{externalError}</p>}
         </div>
     );
 };

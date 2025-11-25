@@ -24,11 +24,12 @@ const ProductCreateForm = ({ showModal, onClose }) => {
                 return !value.trim() ? "SKU is required" : "";
 
             case "image":
-                if (form?.isVariable) return ""; // Image optional for variable products
-                return !value ? "Image is required" : "";
+                return "";
 
             case "inventoryItems":
                 if (form?.isVariable) return ""; // Only required when not variable
+                // Only validate on submit
+                if (!forSubmit) return "";
                 return (Array.isArray(value) && value.length > 0)
                     ? ""
                     : "Select at least 1 inventory item";
@@ -68,7 +69,7 @@ const ProductCreateForm = ({ showModal, onClose }) => {
         onClose={onClose}
         title="Add New Product"
         fields={addProductFields}
-        submitLabel="Add Item"
+        submitLabel="Add Product"
         onSubmit={onSubmit}
         validateField={validateField}
         size="lg"
