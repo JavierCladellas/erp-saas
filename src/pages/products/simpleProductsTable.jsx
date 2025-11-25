@@ -1,8 +1,18 @@
+import { useState } from "react";
 import CheckboxField from "../../components/input/checkbox";
 import Table from "../../components/table";
 import TableActions from "../../components/tableActions";
+import ProductView from "./productView";
 
 const SimpleProductsTable = ({ simpleProducts }) => {
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleRowClick = (product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
     const simpleColumns = [
         {
             key: "image_url", label: "Image", width: "w-16", align: "center",
@@ -87,8 +97,14 @@ const SimpleProductsTable = ({ simpleProducts }) => {
         },
     ];
 
-    return (
-        <Table columns={simpleColumns} data={simpleProducts} maxRows={7} />
+    return (<>
+        <Table columns={simpleColumns} data={simpleProducts} maxRows={7} onRowClick={handleRowClick} />
+        <ProductView
+            showModal={showModal}
+            onClose={() => setShowModal(false)}
+            product={selectedProduct}
+        />
+    </>
     )
 
 }

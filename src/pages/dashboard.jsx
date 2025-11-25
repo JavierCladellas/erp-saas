@@ -25,7 +25,7 @@ const Dashboard = () => {
             case "products": return <Products />;
             case "users": return <Users />;
             case "orders": return <Orders />;
-            default: return <Inventory />;
+            default: return <Products />;
         }
     };
 

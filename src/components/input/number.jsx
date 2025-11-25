@@ -1,4 +1,4 @@
-const NumberField = ({ label, name, value, onChange, min, max, step = 1, externalError, prefix, autoFixDecimals }) => {
+const NumberField = ({ label, name, value, onChange, min, max, step = 1, externalError, prefix, autoFixDecimals, readOnly }) => {
 
     const handleBlur = (e) => {
         let val = e.target.value;
@@ -32,6 +32,7 @@ const NumberField = ({ label, name, value, onChange, min, max, step = 1, externa
                     max={max}
                     step={step}
                     onChange={onChange}
+                    readOnly={readOnly}
                     onBlur={handleBlur}
                     className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 
                         ${prefix ? "pl-8 text-right" : ""} ${externalError ? "border-red-500" : "border-gray-300"} 

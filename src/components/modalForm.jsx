@@ -1,21 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./button";
 import InputFactory from "./input/inputFactory";
 import Modal from "./modal";
 
 
-const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit", validateField, size="md" }) => {
+const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit", validateField, size = "md" }) => {
 
-    const [formData, setFormData] = useState(() => {
-        const initialData = {};
+    const buildInitialData = () => {
+        const initial = {};
         fields.forEach((field) => {
-            if (field.row && Array.isArray(field.fields))
-                field.fields.forEach(sub => { initialData[sub.name] = sub.defaultValue ?? ""; });
-            else
-                initialData[field.name] = field.defaultValue ?? "";
+            if (field.row && Array.isArray(field.fields)) {
+                field.fields.forEach(sub => {
+                    initial[sub.name] = sub.defaultValue ?? "";
+                });
+            } else {
+                initial[field.name] = field.defaultValue ?? "";
+            }
         });
-        return initialData;
-    });
+        return initial;
+    };
+
+    useEffect(() => {
+        if (open) {
+            setFormData(buildInitialData());
+            setErrors({});
+        }
+    }, [open, fields]);
+
+    const [formData, setFormData] = useState(buildInitialData);
     const [errors, setErrors] = useState({});
 
     const validateAll = (forSubmit = true) => {

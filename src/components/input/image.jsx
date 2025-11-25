@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Info } from "lucide-react";
 
-const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label }) => {
+const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label, readOnly }) => {
     const [preview, setPreview] = useState(value || null);
     const [dragging, setDragging] = useState(false);
 
+    // 🔥 Sync preview when `value` is provided (editing existing item)
+    useEffect(() => {
+        if (value) {
+            setPreview(typeof value === "string" ? value : URL.createObjectURL(value));
+        }
+    }, [value]);
+
     const handleFile = (file) => {
+        if (readOnly) return;
         const reader = new FileReader();
         reader.onloadend = () => {
             setPreview(reader.result);
@@ -16,6 +24,7 @@ const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label
 
     const onDrop = (e) => {
         e.preventDefault();
+        if (readOnly) return;
         setDragging(false);
         const file = e.dataTransfer.files[0];
         if (file) handleFile(file);
@@ -36,28 +45,58 @@ const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label
             </label>
 
             <div
-                onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
-                onDragLeave={() => setDragging(false)}
+                onDragOver={(e) => {
+                    if (readOnly) return;
+                    e.preventDefault();
+                    setDragging(true);
+                }}
+                onDragLeave={() => !readOnly && setDragging(false)}
                 onDrop={onDrop}
-                className={` border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-all ${dragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300"} ${externalError ? "border-red-500" : ""} `}            >
+                className={`
+                    border-2 border-dashed rounded-lg p-4 text-center transition-all
+                    ${readOnly ? "cursor-default bg-gray-100 opacity-70" : "cursor-pointer"}
+                    ${dragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}
+                    ${externalError ? "border-red-500" : ""}
+                `}
+            >
                 <input
                     type="file"
                     accept="image/*"
                     className="hidden"
                     id={name}
-                    onChange={(e) => handleFile(e.target.files[0])}
+                    onChange={(e) => !readOnly && handleFile(e.target.files[0])}
+                    disabled={readOnly}
                 />
-                <label htmlFor={name} className="cursor-pointer block">
-                    {preview ? (<img src={preview} className="w-full max-h-60 object-contain rounded-lg mx-auto" alt="Preview" />
+
+                <label
+                    htmlFor={readOnly ? undefined : name}
+                    className={`${readOnly ? "cursor-default" : "cursor-pointer"} block`}
+                >
+                    {preview ? (
+                        <img
+                            src={preview}
+                            className="w-full max-h-60 object-contain rounded-lg mx-auto"
+                            alt="Preview"
+                        />
                     ) : (
                         <div className="text-gray-500 flex flex-col items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 opacity-60 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5V17a2 2 0 002 2h14a2 2 0 002-2v-.5m-9-12v12m0-12L8.5 7.5M12 4.5l3.5 3" />
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-10 h-10 opacity-60 mb-2"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M3 16.5V17a2 2 0 002 2h14a2 2 0 002-2v-.5m-9-12v12m0-12L8.5 7.5M12 4.5l3.5 3"
+                                />
                             </svg>
-                            <span>Click or drag an image here</span>
+                            <span>{readOnly ? "Image preview" : "Click or drag an image here"}</span>
                         </div>
                     )}
-
                 </label>
             </div>
 
