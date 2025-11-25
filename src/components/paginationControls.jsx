@@ -6,6 +6,7 @@ const PaginationControls = ({ currentPage, totalPages, setCurrentPage }) => {
         <div className="flex justify-end items-center gap-2 mt-4 px-4 py-2 text-sm">
             <Button
                 variant="pagination"
+                type="button"
                 className="px-3 py-1"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -19,6 +20,7 @@ const PaginationControls = ({ currentPage, totalPages, setCurrentPage }) => {
 
             <Button
                 variant="pagination"
+                type="button"
                 className="px-3 py-1"
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
