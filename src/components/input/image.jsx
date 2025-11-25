@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Info } from "lucide-react";
 
-const ImageUploadField = ({ name, value, onChange, error, tooltip, label }) => {
+const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label }) => {
     const [preview, setPreview] = useState(value || null);
     const [dragging, setDragging] = useState(false);
 
@@ -39,8 +39,7 @@ const ImageUploadField = ({ name, value, onChange, error, tooltip, label }) => {
                 onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
                 onDragLeave={() => setDragging(false)}
                 onDrop={onDrop}
-                className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-all ${dragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}`}
-            >
+                className={` border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-all ${dragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300"} ${externalError ? "border-red-500" : ""} `}            >
                 <input
                     type="file"
                     accept="image/*"
@@ -49,7 +48,7 @@ const ImageUploadField = ({ name, value, onChange, error, tooltip, label }) => {
                     onChange={(e) => handleFile(e.target.files[0])}
                 />
                 <label htmlFor={name} className="cursor-pointer block">
-                    {preview ? ( <img src={preview} className="w-full max-h-60 object-contain rounded-lg mx-auto"alt="Preview" />
+                    {preview ? (<img src={preview} className="w-full max-h-60 object-contain rounded-lg mx-auto" alt="Preview" />
                     ) : (
                         <div className="text-gray-500 flex flex-col items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 opacity-60 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
@@ -62,7 +61,7 @@ const ImageUploadField = ({ name, value, onChange, error, tooltip, label }) => {
                 </label>
             </div>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {externalError && <p className="text-red-500 text-sm">{externalError}</p>}
         </div>
     );
 };
