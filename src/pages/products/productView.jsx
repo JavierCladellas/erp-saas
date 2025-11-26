@@ -23,6 +23,8 @@ const ProductView = ({showModal, onClose, product }) => {
         onClose={onClose}
         title={`${product?.sku} - ${product?.name}`}
         fields={productViewFields}
+        submitLabel={null}
+        closeLabel="Close"
         size="xl"
     />
 

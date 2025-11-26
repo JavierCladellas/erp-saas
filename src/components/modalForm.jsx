@@ -4,7 +4,7 @@ import InputFactory from "./input/inputFactory";
 import Modal from "./modal";
 
 
-const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit", validateField, size = "md" }) => {
+const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit",closeLabel = "Cancel", validateField, size = "md" }) => {
 
     const buildInitialData = () => {
         const initial = {};
@@ -130,8 +130,8 @@ const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submi
                     ) : null
                 )}
                 <div className="flex justify-end gap-3 border-t pt-4">
-                    <Button variant="secondary" onClick={onClose} type="button"> Cancel </Button>
-                    <Button variant="primary" type="submit"> {submitLabel} </Button>
+                    {closeLabel && <Button variant="secondary" onClick={onClose} type="button"> {closeLabel} </Button>}
+                    {submitLabel && <Button variant="primary" type="submit"> {submitLabel} </Button>}
                 </div>
             </form>
         </Modal>
