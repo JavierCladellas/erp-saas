@@ -42,14 +42,18 @@ const SimpleProductsTable = ({ simpleProducts }) => {
         },
         {
             key: "visible", label: "Visible", width: "w-16", align: "center",
-            render: (_, row) => (<CheckboxField variant="switch" name="" checked={!!row.visibility} />)
+            render: (_, row) => (
+                <div onClick={(e) => e.stopPropagation()}>
+                    <CheckboxField variant="switch" name="visible" checked={!!row.visibility} />
+                </div>
+            )
         },
         {
             key: "featured", label: "Featured", width: "w-16", align: "center",
             render: (_, row) => (
-                <button className={`text-xl transition ${row.featured ? "text-yellow-400" : "text-gray-300"}`}>
-                    ★
-                </button>
+                <div onClick={(e) => e.stopPropagation()}>
+                    <CheckboxField variant="star" name="featured" checked={!!row.featured} />
+                </div>
             )
         },
         {

@@ -1,4 +1,4 @@
-const CheckboxField = ({ name, value, onChange, label, externalError, variant = "classic", readOnly}) => {
+const CheckboxField = ({ name, value, onChange, label, externalError, variant = "classic", readOnly }) => {
     let variantStyle = null;
 
     switch (variant) {
@@ -19,6 +19,16 @@ const CheckboxField = ({ name, value, onChange, label, externalError, variant = 
                     {label && label}
                 </label>
             )
+            break;
+        case "star":
+            variantStyle = (
+                <label className="cursor-pointer text-xl select-none" >
+                    <input type="checkbox" name={name} checked={value} onChange={onChange} readOnly={readOnly} className="sr-only" />
+                    <span className={`transition ${value ? "text-yellow-400" : "text-gray-300"}`}>
+                        ★
+                    </span>
+                </label>
+            );
             break;
         default:
             variantStyle = null;
