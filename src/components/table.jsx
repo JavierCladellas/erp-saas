@@ -2,7 +2,7 @@ import { useState, Fragment } from "react";
 import PaginationControls from "./paginationControls";
 import { FaChevronRight } from "react-icons/fa";
 
-const Table = ({ columns, data, maxRows = 15, subRowsKey, subColumns, onRowClick, isRowSelected, rowClassName }) => {
+const Table = ({ columns, data, maxRows = 15, subRowsKey, subColumns, onRowClick, isRowSelected, rowClassName, onSubRowClick }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [expandedRows, setExpandedRows] = useState({});
     const totalPages = Math.ceil(data.length / maxRows);
@@ -125,7 +125,7 @@ const Table = ({ columns, data, maxRows = 15, subRowsKey, subColumns, onRowClick
                                                 </thead>
                                                 <tbody>
                                                     {row[subRowsKey].map((subRow, idx) => (
-                                                        <tr key={idx} className="bg-gray-50">
+                                                        <tr key={idx} className={`bg-gray-50 ${onSubRowClick ? "cursor-pointer hover:bg-gray-100" : ""}`} onClick={() => onSubRowClick?.(subRow)} >
                                                             {subColumns.map((col) => (
                                                                 <td key={col.key} className={`px-4 py-2 whitespace-nowrap`}>
                                                                     {col.render ? (
@@ -147,24 +147,25 @@ const Table = ({ columns, data, maxRows = 15, subRowsKey, subColumns, onRowClick
                                                             ))}
                                                         </tr>
                                                     ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
                                 </tr>
-                            )}
-                        </Fragment>
+                    )}
+                </Fragment>
                     ))}
-                </tbody>
-            </table>
+            </tbody>
+        </table>
 
-            {totalPages > 1 &&
-                <PaginationControls currentPage={currentPage}
-                    totalPages={totalPages}
-                    setCurrentPage={setCurrentPage}
-                />
-            }
-        </div>
+            {
+        totalPages > 1 &&
+        <PaginationControls currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+        />
+    }
+        </div >
     );
 };
 

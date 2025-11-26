@@ -1,9 +1,19 @@
+import { useState } from "react";
 import CheckboxField from "../../components/input/checkbox";
 import Table from "../../components/table";
 import TableActions from "../../components/tableActions";
+import VariantView from "./variantView";
 
 
 const VariableProductsTable = ({ variableProducts }) => {
+    const [selectedVariant, setSelectedVariant] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleSubRowClick = (variant) => {
+        setSelectedVariant(variant);
+        setShowModal(true);
+    };
+
     const variableColumns = [
         {
             key: "image_url",
@@ -86,7 +96,14 @@ const VariableProductsTable = ({ variableProducts }) => {
     ];
 
     return (
-        <Table columns={variableColumns} data={variableProducts} maxRows={7} subRowsKey={"variants"} subColumns={variableSubColumns} />
+        <>
+            <Table columns={variableColumns} data={variableProducts} maxRows={7} subRowsKey={"variants"} subColumns={variableSubColumns} onSubRowClick={handleSubRowClick}/>
+            <VariantView
+                showModal={showModal}
+                onClose={() => setShowModal(false)}
+                variant={selectedVariant}
+            />
+        </>
     )
 };
 
