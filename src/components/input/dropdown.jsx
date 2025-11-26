@@ -1,23 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 
-const SearchableDropdown = ({
-    label,
-    name,
-    value,
-    onChange,
-    options = [],
-    placeholder = "Select…",
-    externalError,
-    className = "",
-    readOnly
-}) => {
+const SearchableDropdown = ({ label, name, value, onChange, options = [], placeholder = "Select…", externalError, className = "", readOnly }) => {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const containerRef = useRef(null);
 
     const selectedLabel = options.find((o) => o.value === value)?.label || "";
 
-    // Close on outside click
     useEffect(() => {
         const handler = (e) => {
             if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -29,14 +18,16 @@ const SearchableDropdown = ({
         return () => document.removeEventListener("mousedown", handler);
     }, []);
 
-    const filtered = options.filter((opt) => opt.label.toLowerCase().includes(search.toLowerCase()));
+    const filtered = options.filter((opt) => opt.label.toLowerCase().includes(search.toLowerCase()) );
 
     const handleSelect = (option) => {
-        if (readOnly) return; // 🚫 Prevent selection
+        if (readOnly) return;
         onChange?.({ target: { name, value: option.value } });
         setOpen(false);
         setSearch("");
     };
+
+    const readOnlyStyle = readOnly ? "bg-gray-100 text-gray-500 cursor-not-allowed opacity-70" : "cursor-pointer";
 
     return (
         <div className="relative w-full" ref={containerRef}>
@@ -49,8 +40,7 @@ const SearchableDropdown = ({
                             if (!readOnly) setOpen(true);
                         }}
                         className={`block w-full border rounded-md px-3 py-2 ${externalError ? "border-red-500" : "border-gray-300"
-                            } text-gray-900 ${readOnly ? "bg-gray-100 cursor-default text-gray-500" : "cursor-pointer"
-                            }`}
+                            } text-gray-900 ${readOnlyStyle}`}
                     >
                         {selectedLabel || placeholder}
                         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
@@ -64,7 +54,7 @@ const SearchableDropdown = ({
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={selectedLabel || placeholder}
                         onClick={(e) => e.stopPropagation()}
-                        disabled={readOnly} // 🛡️ Prevent editing
+                        disabled={readOnly}
                         className={`w-full border rounded-md px-3 py-2 ${externalError ? "border-red-500" : "border-gray-300"
                             } outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900`}
                     />

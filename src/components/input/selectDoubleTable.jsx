@@ -1,18 +1,8 @@
 import { useState, useMemo } from "react";
 import Table from "../../components/table";
 
-const SelectDoubleTable = ({
-    items = [],
-    value = [],
-    columns,
-    label,
-    onChange,
-    searchKeys = ["name", "sku"],
-    externalError,
-    readOnly = false
-}) => {
+const SelectDoubleTable = ({ items = [], value = [], columns, label, onChange, searchKeys = ["name", "sku"], externalError, readOnly = false }) => {
 
-    // 🔥 Normalize so it works whether value is [1,2] or [{id:1},{id:2}]
     const normalizedValue = Array.isArray(value)
         ? value.map(v => (typeof v === "object" ? v.id : v))
         : [];
@@ -25,7 +15,6 @@ const SelectDoubleTable = ({
         return searchKeys.some(key => item[key]?.toString().toLowerCase().includes(query));
     };
 
-    // 🔥 selected items now always work
     const selectedItems = useMemo(
         () => safeItems.filter(item => normalizedValue.includes(item.id)),
         [safeItems, normalizedValue]
@@ -48,6 +37,8 @@ const SelectDoubleTable = ({
         }
     };
 
+    const readOnlyContainer = readOnly ? "bg-gray-100 opacity-70 cursor-not-allowed" : "";
+
     return (
         <div className="space-y-3">
 
@@ -63,7 +54,7 @@ const SelectDoubleTable = ({
             )}
 
             {selectedItems.length > 0 && (
-                <div className="border rounded-lg p-2 bg-gray-50">
+                <div className={`border rounded-lg p-2 bg-gray-50 ${readOnlyContainer}`}>
                     <div className="text-sm font-medium mb-2 text-gray-700">
                         Selected Items ({selectedItems.length})
                     </div>
@@ -74,20 +65,21 @@ const SelectDoubleTable = ({
                             data={selectedItems}
                             maxRows={5}
                             onRowClick={readOnly ? null : (row) => toggleItem(row.id)}
-                            isRowSelected={() => true}
+                            isRowSelected={() => !readOnly}
+                            rowClassName={readOnly ? "cursor-not-allowed bg-gray-100 hover:bg-gray-100" : ""}
                         />
                     </div>
                 </div>
             )}
 
             {!readOnly && (
-                <div className={`max-h-72 overflow-y-auto border rounded-lg ${externalError ? "border-red-500" : "border-gray-300"}`}>
+                <div className={`${!readOnly ? "max-h-72 overflow-y-auto" : ""} border rounded-lg ${readOnlyContainer} ${externalError ? "border-red-500" : "border-gray-300"}`} >
                     <Table
                         columns={columns}
                         data={filtered}
-                        maxRows={10}
-                        onRowClick={(row) => toggleItem(row.id)}
-                        isRowSelected={(row) => normalizedValue.includes(row.id)}
+                        maxRows={5}
+                        onRowClick={readOnly ? null : (row) => toggleItem(row.id)}
+                        isRowSelected={() => false}
                     />
                 </div>
             )}

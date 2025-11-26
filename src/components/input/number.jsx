@@ -8,11 +8,12 @@ const NumberField = ({ label, name, value, onChange, min, max, step = 1, externa
         if (isNaN(num)) return;
 
         if (autoFixDecimals) {
-            // Fix to 2 decimals
             val = num.toFixed(2);
             onChange({ target: { name, value: val } });
         }
     };
+
+    const readOnlyStyle = readOnly ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "";
 
     return (
         <div className="w-full">
@@ -24,18 +25,11 @@ const NumberField = ({ label, name, value, onChange, min, max, step = 1, externa
                         {prefix}
                     </span>
                 )}
-                <input
-                    type="number"
-                    name={name}
-                    value={value}
-                    min={min}
-                    max={max}
-                    step={step}
-                    onChange={onChange}
-                    readOnly={readOnly}
-                    onBlur={handleBlur}
-                    className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 
-                        ${prefix ? "pl-8 text-right" : ""} ${externalError ? "border-red-500" : "border-gray-300"} 
+                <input type="number" name={name} value={value} min={min} max={max} step={step} onChange={onChange} readOnly={readOnly} onBlur={handleBlur}
+                    className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500
+                        ${prefix ? "pl-8 text-right" : ""}
+                        ${externalError ? "border-red-500" : "border-gray-300"}
+                        ${readOnlyStyle}
                         appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
                 />
             </div>

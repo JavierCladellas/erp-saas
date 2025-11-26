@@ -5,7 +5,6 @@ const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label
     const [preview, setPreview] = useState(value || null);
     const [dragging, setDragging] = useState(false);
 
-    // 🔥 Sync preview when `value` is provided (editing existing item)
     useEffect(() => {
         if (value) {
             setPreview(typeof value === "string" ? value : URL.createObjectURL(value));
@@ -29,6 +28,8 @@ const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label
         const file = e.dataTransfer.files[0];
         if (file) handleFile(file);
     };
+
+    const readOnlyStyle = readOnly ? "bg-gray-100 opacity-70 cursor-not-allowed" : "cursor-pointer";
 
     return (
         <div className="w-full flex flex-col gap-1">
@@ -54,8 +55,8 @@ const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label
                 onDrop={onDrop}
                 className={`
                     border-2 border-dashed rounded-lg p-4 text-center transition-all
-                    ${readOnly ? "cursor-default bg-gray-100 opacity-70" : "cursor-pointer"}
-                    ${dragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}
+                    ${readOnlyStyle}
+                    ${dragging && !readOnly ? "border-indigo-500 bg-indigo-50" : "border-gray-300"}
                     ${externalError ? "border-red-500" : ""}
                 `}
             >
@@ -70,7 +71,7 @@ const ImageUploadField = ({ name, value, onChange, externalError, tooltip, label
 
                 <label
                     htmlFor={readOnly ? undefined : name}
-                    className={`${readOnly ? "cursor-default" : "cursor-pointer"} block`}
+                    className={`${readOnly ? "cursor-not-allowed" : "cursor-pointer"} block`}
                 >
                     {preview ? (
                         <img
