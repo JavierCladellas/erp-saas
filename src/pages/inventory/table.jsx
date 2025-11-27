@@ -1,8 +1,14 @@
 import Table from "../../components/table";
 import TableActions from "../../components/tableActions";
+import { useState } from "react";
+import ItemEditForm from "./editForm";
+import ItemDeleteForm from "./deleteForm";
 
 
 const InventoryTable = ({ data }) => {
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const columns = [
         {
@@ -26,14 +32,24 @@ const InventoryTable = ({ data }) => {
             key: "actions", label: "", width: "w-10", align: "right",
             render: (_, row) => (
                 <TableActions
-                    onEdit={() => alert(`Edit ${row.name}`)}
-                    onDelete={() => alert(`Delete ${row.name}`)}
+                    onEdit={() => {
+                        setSelectedItem(row);
+                        setShowEditModal(true);
+                    }}
+                    onDelete={() => {
+                        setSelectedItem(row);
+                        setShowDeleteModal(true);
+                    }}
                 />
             ),
         },
     ];
 
-    return <Table columns={columns} data={data} />;
+    return <>
+        <Table columns={columns} data={data} />;
+        <ItemEditForm showModal={showEditModal} onClose={() => setShowEditModal(false)} item={selectedItem}/>
+        <ItemDeleteForm showModal={showDeleteModal} onClose={()=> setShowDeleteModal(false)} item={selectedItem} />
+    </>
 
 }
 

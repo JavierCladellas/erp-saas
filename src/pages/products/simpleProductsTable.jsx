@@ -3,14 +3,18 @@ import CheckboxField from "../../components/input/checkbox";
 import Table from "../../components/table";
 import TableActions from "../../components/tableActions";
 import ProductView from "./productView";
+import ProductEditForm from "./editForm";
+import ProductDeleteForm from "./deleteForm";
 
 const SimpleProductsTable = ({ simpleProducts }) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+    const [showViewModal, setShowViewModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const handleRowClick = (product) => {
         setSelectedProduct(product);
-        setShowModal(true);
+        setShowViewModal(true);
     };
 
     const simpleColumns = [
@@ -72,8 +76,14 @@ const SimpleProductsTable = ({ simpleProducts }) => {
             key: "actions", label: "", width: "w-10", align: "right",
             render: (_, row) => (
                 <TableActions
-                    onEdit={() => alert(`Edit ${row.name}`)}
-                    onDelete={() => alert(`Delete ${row.name}`)}
+                    onEdit={() => {
+                        setSelectedProduct(row);
+                        setShowEditModal(true);
+                    }}
+                    onDelete={() => {
+                        setSelectedProduct(row);
+                        setShowDeleteModal(true);
+                    }}
                 />
             ),
         }
@@ -104,10 +114,21 @@ const SimpleProductsTable = ({ simpleProducts }) => {
     return (<>
         <Table columns={simpleColumns} data={simpleProducts} maxRows={7} onRowClick={handleRowClick} />
         <ProductView
-            showModal={showModal}
-            onClose={() => setShowModal(false)}
+            showModal={showViewModal}
+            onClose={() => setShowViewModal(false)}
             product={selectedProduct}
         />
+        <ProductEditForm
+            showModal={showEditModal}
+            onClose={()=> setShowEditModal(false)}
+            product={selectedProduct}
+        />
+        <ProductDeleteForm
+            showModal={showDeleteModal}
+            onClose={()=> setShowDeleteModal(false)}
+            product={selectedProduct}
+        />
+
     </>
     )
 

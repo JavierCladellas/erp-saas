@@ -4,7 +4,7 @@ import InputFactory from "./input/inputFactory";
 import Modal from "./modal";
 
 
-const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit",closeLabel = "Cancel", validateField, size = "md" }) => {
+const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submitLabel = "Submit", closeLabel = "Cancel", validateField, size = "md", body }) => {
 
     const buildInitialData = () => {
         const initial = {};
@@ -111,6 +111,11 @@ const ModalForm = ({ open, onClose, onFormChange, title, fields, onSubmit, submi
 
     return (
         <Modal open={open} onClose={onClose} title={title} size={size}>
+            {body &&
+    <div className="mb-6 text-base text-gray-800 leading-relaxed p-4 bg-gray-50 rounded-lg shadow-inner">
+                    {body}
+                </div>
+            }
             <form onSubmit={handleSubmit} onChange={onFormChange} className="space-y-5 mt-2">
                 {fields.map((field, idx) =>
                     field.row && Array.isArray(field.fields) ? (
