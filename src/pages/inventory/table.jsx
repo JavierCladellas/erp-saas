@@ -3,12 +3,19 @@ import TableActions from "../../components/tableActions";
 import { useState } from "react";
 import ItemEditForm from "./editForm";
 import ItemDeleteForm from "./deleteForm";
+import ItemView from "./itemView";
 
 
 const InventoryTable = ({ data }) => {
     const [selectedItem, setSelectedItem] = useState(null);
+    const [showViewModal, setShowViewModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const handleRowClick = (item) => {
+        setSelectedItem(item);
+        setShowViewModal(true);
+    };
 
     const columns = [
         {
@@ -46,7 +53,8 @@ const InventoryTable = ({ data }) => {
     ];
 
     return <>
-        <Table columns={columns} data={data} />;
+        <Table columns={columns} data={data} onRowClick={handleRowClick} />;
+        <ItemView showModal={showViewModal} onClose={() => setShowViewModal(false)} item={selectedItem} />
         <ItemEditForm showModal={showEditModal} onClose={() => setShowEditModal(false)} item={selectedItem}/>
         <ItemDeleteForm showModal={showDeleteModal} onClose={()=> setShowDeleteModal(false)} item={selectedItem} />
     </>
